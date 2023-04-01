@@ -348,12 +348,6 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-<<<<<<< HEAD
-        String [] t_attrs = this.attribute.clone();
-        String [] u_attrs = table2.attribute.clone();
-        
-        return new Table (name + count++, ArrayUtil.concat (attribute, table2_Attributes),
-=======
         List <String> attr = new ArrayList <> (); //common attr
 
         //double for loop search to find common attr
@@ -382,7 +376,6 @@ public class Table
 
         // FIX - eliminate duplicate columns
         return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),
->>>>>>> 83cbf02ff343594c08edcc1b7a5ea6373d03443a
                                           ArrayUtil.concat (domain, table2.domain), key, rows);
     } // join
 
