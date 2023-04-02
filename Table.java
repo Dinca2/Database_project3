@@ -267,6 +267,8 @@ public class Table
      * are compared requiring attributes1 to equal attributes2.  Disambiguate attribute
      * names by append "2" to the end of any duplicate attribute name.
      *
+     * @author  Lin Zhao
+     *
      * #usage movie.join ("studioNo", "name", studio)
      *
      * @param attribute1  the attributes of this table to be compared (Foreign Key)
@@ -274,7 +276,7 @@ public class Table
      * @param table2      the rhs table in the join operation
      * @return  a table with tuples satisfying the equality predicate
      */
-    public Table join (String attributes1, String attributes2, Table table2)
+    public Table indexJoin (String attributes1, String attributes2, Table table2)
     {
         out.println ("RA> " + name + ".join (" + attributes1 + ", " + attributes2 + ", "
                                                + table2.name + ")");
@@ -283,121 +285,119 @@ public class Table
         String [] u_attrs = attributes2.split (" ");
 
         List <Comparable []> rows = new ArrayList <> ();
-        
-        int ind1 [] = match(t_attrs);
-        int ind2 [] = match(u_attrs);
-        
-        for(Comparable [] t : this.tuples) {
-            for(Comparable [] u : table2.tuples) {
-                boolean equal = true;
-                Comparable [] tAttr = new Comparable [t_attrs.length];
-                Comparable [] uAttr = new Comparable [u_attrs.length];
 
-                //gets tuple from target attribute from this table
-                for (int i = 0; i < t_attrs.length; i++) {
-                    tAttr[i] = t[ind1[i]];
-                } //for
+		if (t_attrs.length != u_attrs.length) {
+			System.out.println("Cannot Perform Join Operator");
+			return null;
+		}
+ 		
+		for (Comparable[] tuple1 : tuples) {
+				
+            Comparable [] keyVal = new Comparable [key.length];
+            int []        cols   = match (key);
+            for (int j = 0; j < keyVal.length; j++) keyVal [j] = tuple1 [cols [j]];
+            Comparable[] tuple2 = table2.index.get(new KeyType(keyVal));
 
-                //gets tuple from target attribute from table2
-                for (int i = 0; i < u_attrs.length; i++) {
-                    uAttr[i] = u[ind2[i]];
-                } //for
-                
-                //compares the tuples 
-                for(int i = 0; i < t_attrs.length; i++) {
-                    if(tAttr[i] != uAttr[i]) {
-                        equal = false;
-                    } 
-                }
+            if (tuple2 != null) {
+                Comparable[] join_tuple = ArrayUtil.concat(tuple1, tuple2);
+                rows.add(join_tuple);
+            } //if
 
-                //adds the row of the tuples if they are equal to each other
-                if(equal) {
-                    Comparable [] row = ArrayUtil.concat(t, u);
-                    rows.add(row);
-                }
-            }
-        }
+		} //for
 
-        //compares each attribute from both tables and then concatinates a "2" on any duplicate in the second table
-        String [] table2_Attributes = table2.attribute.clone(); 
-        for(int a = 0; a < this.attribute.length; a++) {
-            for (int b = 0; b < table2.attribute.length; b++) {
-                if(this.attribute[a].equals(table2.attribute[b])) {
-                    table2_Attributes[b] = table2.attribute[b] + "2";
-                }
-            }
-        } 
+		// Disambiguate attribute names by append "2" to the end of any duplicate attribute name.
+		// Here we just need to rename the attribute names in table2 then concatenate them to those in table1 
+		String[] attribute2_new = table2.attribute;
+		
+		for (int j = 0; j < t_attrs.length; j++) {
+			for (int k = 0; k < attribute2_new.length; ++k) {
+				
+				if (attribute2_new[k].equals(t_attrs[j])) {
+					
+					String tmp_attri = t_attrs[j] + "2"; 
+					attribute2_new[j] = tmp_attri;
+				}
+			}
+		}
+		
 
-        return new Table (name + count++, ArrayUtil.concat (attribute, table2_Attributes),
-                                          ArrayUtil.concat (domain, table2.domain), key, rows);
-    } // join
+		return new Table (name + count++, ArrayUtil.concat (attribute, attribute2_new),
+				ArrayUtil.concat (domain, table2.domain), key, rows);
+	} // join
 
-      /************************************************************************************
-    * Join this table and table2 by performing an "equi-join".  Tuples from both tables
-    * are compared requiring attributes1 to equal attributes2.  Disambiguate attribute
-    * names by append "2" to the end of any duplicate attribute name. This is an indexed 
-    *
-    * @author  Lin Zhao
-    *
-    * #usage movie.join ("studioNo", "name", studio)
-    *
-    * @param attribute1  the attributes of this table to be compared (Foreign Key)
-    * @param attribute2  the attributes of table2 to be compared (Primary Key)
-    * @param table2      the rhs table in the join operation
-    * @return  a table with tuples satisfying the equality predicate
-    */
-    public Table join2 (String attributes1, String attributes2, Table table2) {
-        out.println ("RA> " + name + ".join (" + attributes1 + ", " + attributes2 + ", " + table2.name + ")");
+    /************************************************************************************
+     * Join this table and table2 by performing an "equi-join".  Tuples from both tables
+     * are compared requiring attributes1 to equal attributes2.  Disambiguate attribute
+     * names by append "2" to the end of any duplicate attribute name.
+     *
+     * @author  Lin Zhao
+     *
+     * #usage movie.join ("studioNo", "name", studio)
+     *
+     * @param attribute1  the attributes of this table to be compared (Foreign Key)
+     * @param attribute2  the attributes of table2 to be compared (Primary Key)
+     * @param table2      the rhs table in the join operation
+     * @return  a table with tuples satisfying the equality predicate
+     */
+    public Table nonIndexJoin (String attributes1, String attributes2, Table table2)
+    {
+        out.println ("RA> " + name + ".join (" + attributes1 + ", " + attributes2 + ", "
+                                               + table2.name + ")");
 
         String [] t_attrs = attributes1.split (" ");
         String [] u_attrs = attributes2.split (" ");
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        if (t_attrs.length != u_attrs.length) {
-            System.out.println("Cannot Perform Join Operator");
-            return null;
-        }
+		if (t_attrs.length != u_attrs.length) {
+			System.out.println("Cannot Perform Join Operator");
+			return null;
+		}
+ 		
+		for (Comparable[] tuple1 : tuples) {
+			for (Comparable[] tuple2 : table2.tuples) {
+				
+			    Comparable[] Attri1 = this.extract(tuple1, t_attrs);
+			    Comparable[] Attri2 = table2.extract(tuple2, u_attrs);
+			
+			    boolean flag = true;
+			    
+				// Judge if attributes1 in table1 is equal to attributes2 in table 2
+			    for (int i = 0; i < Attri1.length; i++) {
+				
+				    if (!Attri1[i].equals(Attri2[i])) {
+						flag = false;
+						break;
+					}
+				}
 
-        for (Comparable[] tuple1 : tuples) {
-            for (Comparable[] tuple2 : table2.tuples) {
-                Comparable[] Attri1 = this.extract(tuple1, t_attrs);
-                Comparable[] Attri2 = table2.extract(tuple2, u_attrs);
+				// Concatenate tuples from table1&2 to form a new tuple
+			    if (flag) {
+				    Comparable[] join_tuple = ArrayUtil.concat(tuple1, tuple2);
+				    rows.add(join_tuple);
+				}
+			}
+		}
 
-                boolean flag = true;
+		// Disambiguate attribute names by append "2" to the end of any duplicate attribute name.
+		// Here we just need to rename the attribute names in table2 then concatenate them to those in table1 
+		String[] attribute2_new = table2.attribute;
+		
+		for (int j = 0; j < t_attrs.length; j++) {
+			for (int k = 0; k < attribute2_new.length; ++k) {
+				
+				if (attribute2_new[k].equals(t_attrs[j])) {
+					
+					String tmp_attri = t_attrs[j] + "2"; 
+					attribute2_new[j] = tmp_attri;
+				}
+			}
+		}
+		
 
-                // Judge if attributes1 in table1 is equal to attributes2 in table 2
-                for (int i = 0; i < Attri1.length; i++) {
-                    if (!Attri1[i].equals(Attri2[i])) {
-                        flag = false;
-                        break;
-                    }
-                }
-
-                // Concatenate tuples from table1&2 to form a new tuple
-                if (flag) {
-                    Comparable[] join_tuple = ArrayUtil.concat(tuple1, tuple2);
-                    rows.add(join_tuple);
-                }
-            }
-        }
-
-    // Disambiguate attribute names by append "2" to the end of any duplicate attribute name.
-    // Here we just need to rename the attribute names in table2 then concatenate them to those in table1
-    String[] attribute2_new = table2.attribute;
-
-    for (int j = 0; j < t_attrs.length; j++) {
-        for (int k = 0; k < attribute2_new.length; ++k) {
-            if (attribute2_new[k].equals(t_attrs[j])) {
-                String tmp_attri = t_attrs[j] + "2"; 
-                attribute2_new[j] = tmp_attri;
-            }
-        }
-    }
-
-    return new Table (name + count++, ArrayUtil.concat (attribute, attribute2_new), ArrayUtil.concat (domain, table2.domain), key, rows);
-} // join
-
+		return new Table (name + count++, ArrayUtil.concat (attribute, attribute2_new),
+				ArrayUtil.concat (domain, table2.domain), key, rows);
+	} // join
 
     /************************************************************************************
      * Join this table and table2 by performing an "natural join".  Tuples from both tables
