@@ -135,12 +135,15 @@ public class TupleGeneratorImpl
                         } else {  // non-key does not require uniqueness
 
                             switch (domain[k]) {
+
+                                //*******************changed bound from 100000 to 5000****************************
+
                             case "Integer":
-                                subResult[j][k] = rand.nextInt(1000000); break;
+                                subResult[j][k] = rand.nextInt(5000); break;
                             case "String":
-                                subResult[j][k] = attribute [k] + rand.nextInt (1000000); break;
+                                subResult[j][k] = attribute [k] + rand.nextInt (5000); break;
                             case "Double":
-                                subResult[j][k] = rand.nextInt (100000) * rand.nextDouble (); break;
+                                subResult[j][k] = rand.nextInt (5000) * rand.nextDouble (); break;
                             default:
                                 throw new IllegalArgumentException("Invalid type in switch: " + domain[k]);
                             } // switch
@@ -164,6 +167,7 @@ public class TupleGeneratorImpl
                                 if (attribute[s].equals (fks[n][0])) break;
                             } // for
                             String[] tempAtr = tableAttr.get(fks[n][1]);
+                            
                             int x;
                             for (x = 0; x < tempAtr.length; x++) {
                                 if (tempAtr[x].equals (fks[n][2])) break;
