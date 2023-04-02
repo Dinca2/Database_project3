@@ -147,7 +147,18 @@ public class LinHashMap <K extends java.lang.Comparable<? super K>, V>
     public TreeSet <Map.Entry <K, V>> entrySet ()
     {
         TreeSet<Entry<K,V>> enSet = new java.util.TreeSet <Map.Entry <K, V>> (new KeyComparator<K, V>());
-
+        for (var i = 0; i < mod1; i++) {
+            Bucket b = hTable.get(i); 
+            while (b != null) {
+                for (var j = 0; j < SLOTS; j++) {
+                    if (b.key[j] == null || b.value[j] == null) {
+                        break;
+                    } //if
+                    enSet.add(Map.entry(b.key[j], b.value[j]));
+                } //for
+                b = b.next;
+            } //while
+        } //for
         // T O B E I M P L E M E N T E D
 
         return enSet;
@@ -254,8 +265,42 @@ public class LinHashMap <K extends java.lang.Comparable<? super K>, V>
      */
     private void split ()
     {
-        // T O B E I M P L E M E N T E D
-
+        //move things over to the new bucket if they need to be moved
+        Bucket b = hTable.get(isplit); //bucket to be split
+        Bucket x = new Bucket(); //kept
+        Bucket y = new Bucket(); //move to new bucket
+        Bucket temp_x = x;
+        Bucket temp_y = y;
+        while (b != null) { //while bucket to be split has buckets
+            for (var i = 0; i < SLOTS; i++) { //for each slot in bucket
+                if (temp_x.nKeys == SLOTS) { //add new bucket chain if slots are filled
+                    temp_x.next = new Bucket();
+                    temp_x = temp_x.next;
+                } //if
+                if (temp_y.nKeys == SLOTS) {
+                    temp_y.next = new Bucket();
+                    temp_y = temp_y.next;
+                } //if
+                if (b.key[i] == null) {
+                    break;
+                } //if
+                if (h2(b.key[i]) == isplit) { //<--im assuming this works the way i think it does
+                    temp_x.add(b.key[i], b.value[i]);
+                } else {
+                    temp_y.add(b.key[i], b.value[i]);
+                } //if
+            } //for
+            b = b.next;
+        } //while
+        hTable.set(isplit, x); 
+        hTable.add(y); 
+        //Increment 'isplit'.  If current split phase is complete, reset 'isplit' to zero, and update the hash functions.
+        isplit++;
+        if (isplit == mod1) {
+            isplit = 0;
+            mod1 = mod2;
+            mod2 = 2 * mod1;
+        }
     } // split
 
     /********************************************************************************
@@ -310,7 +355,7 @@ public class LinHashMap <K extends java.lang.Comparable<? super K>, V>
      */
     public static void main (String [] args)
     {
-        var totalKeys = 7;
+        var totalKeys = 63;
         var RANDOMLY  = false;
 
         LinHashMap <Integer, Integer> ht = new LinHashMap <> (Integer.class, Integer.class);
@@ -321,7 +366,7 @@ public class LinHashMap <K extends java.lang.Comparable<? super K>, V>
             for (var i = 1; i <= totalKeys; i += 2) ht.put (rng.nextInt (2 * totalKeys), i * i);
         } else {
             // CHANGE BACK TO 2 ORIGINAL
-            for (var i = 1; i <= totalKeys; i += 1) ht.put (i, i * i);
+            for (var i = 0; i <= totalKeys; i += 1) ht.put (i, i * i);
         } // if
 
         ht.print ();
@@ -333,10 +378,10 @@ public class LinHashMap <K extends java.lang.Comparable<? super K>, V>
 
 
 
-        // for(Map.Entry<Integer,Integer> s : ht.entrySet()){
-            // out.print(s.getKey()+ "     ");
-            // out.println(s.getValue());
-        // }
+        for(Map.Entry<Integer,Integer> s : ht.entrySet()){
+            out.print(s.getKey()+ "     ");
+            out.println(s.getValue());
+        } //for
 
     } // main
 
