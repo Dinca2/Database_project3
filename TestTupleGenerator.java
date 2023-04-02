@@ -54,10 +54,11 @@ public class TestTupleGenerator
                            new String [][] {{ "studId", "Student", "id"},
                                             { "crsCode", "Course", "crsCode" },
                                             { "crsCode semester", "Teaching", "crsCode semester" }});
-
+        
         var tables = new String [] { "Student", "Professor", "Course", "Teaching", "Transcript" };
+
         var tups   = new int [] { 10000, 1000, 2000, 50000, 5000 };
-    
+       
         var resultTest = test.generate (tups);
         
         for (var i = 0; i < resultTest.length; i++) {

@@ -21,7 +21,6 @@ public class LinHashMap <K extends java.lang.Comparable<? super K>, V>
     /** The debug flag
      */
     private static final boolean DEBUG = true;
-
     /** The number of slots (for key-value pairs) per bucket.
      */
     private static final int SLOTS = 3;
