@@ -105,6 +105,7 @@ class EvalPerf {
         long speed3 = 0;
         long speed4 = 0;
         
+        /* 
         for(int i = 0; i < 5; i++) {
             speed1 = 0;
             speed2 = 0;
@@ -157,7 +158,7 @@ class EvalPerf {
         for(int i = 0; i < 5; i++) {
             System.out.println(speeds4[i]);
         }
-
+*/
         for(int i = 0; i < 5; i++) {
             speed1 = 0;
             speed2 = 0;
@@ -271,7 +272,7 @@ class EvalPerf {
         for(int i = 0; i < 5; i++) {
             System.out.println(speeds4[i]);
         }
-        
+        /* 
         for(int i = 0; i < 5; i++) {
             speed1 = 0;
             speed2 = 0;
@@ -324,7 +325,7 @@ class EvalPerf {
         for(int i = 0; i < 5; i++) {
             System.out.println(speeds4[i]);
         }
-        
+        */
         /* 
         JFrame frame = new JFrame();  
         // set size, layout and location for frame.  
