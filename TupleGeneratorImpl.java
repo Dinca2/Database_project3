@@ -111,20 +111,20 @@ public class TupleGeneratorImpl
 
                             switch (domain[k]) {
                             case "Integer":
-                                for (iVal = rand.nextInt (20000); pKeyValues.contains (iVal);
-                                     iVal = rand.nextInt (20000));
+                                for (iVal = rand.nextInt (30000); pKeyValues.contains (iVal);
+                                     iVal = rand.nextInt (30000));
                                 subResult[j][k] = iVal;
                                 pKeyValues.add (iVal);
                                 break;
                             case "String":
-                                for (sVal = attribute[k] + rand.nextInt (20000); pKeyValues.contains(sVal);
-                                     sVal = attribute[k] + rand.nextInt (20000));
+                                for (sVal = attribute[k] + rand.nextInt (30000); pKeyValues.contains(sVal);
+                                     sVal = attribute[k] + rand.nextInt (30000));
                                 subResult[j][k] = sVal;
                                 pKeyValues.add (sVal);
                                 break;
                             case "Double":
-                                for (dVal = rand.nextInt (20000) * rand.nextDouble (); pKeyValues.contains( dVal);
-                                     dVal = rand.nextInt (20000) * rand.nextDouble ());
+                                for (dVal = rand.nextInt (30000) * rand.nextDouble (); pKeyValues.contains( dVal);
+                                     dVal = rand.nextInt (30000) * rand.nextDouble ());
                                 subResult[j][k] = dVal;
                                 pKeyValues.add (dVal);
                                 break;
@@ -139,11 +139,11 @@ public class TupleGeneratorImpl
                                 //*******************changed bound from 100000 to 5000****************************
 
                             case "Integer":
-                                subResult[j][k] = rand.nextInt(20000); break;
+                                subResult[j][k] = rand.nextInt(30000); break;
                             case "String":
-                                subResult[j][k] = attribute [k] + rand.nextInt (20000); break;
+                                subResult[j][k] = attribute [k] + rand.nextInt (30000); break;
                             case "Double":
-                                subResult[j][k] = rand.nextInt (20000) * rand.nextDouble (); break;
+                                subResult[j][k] = rand.nextInt (30000) * rand.nextDouble (); break;
                             default:
                                 throw new IllegalArgumentException("Invalid type in switch: " + domain[k]);
                             } // switch
@@ -208,20 +208,20 @@ public class TupleGeneratorImpl
 
                                 switch (domain[k]) {
                                 case "Integer":
-                                    for (iVal = rand.nextInt (20000); pKeyValues.contains (iVal);
-                                         iVal = rand.nextInt (20000));
+                                    for (iVal = rand.nextInt (30000); pKeyValues.contains (iVal);
+                                         iVal = rand.nextInt (30000));
                                     subResult[j][k] = iVal;
                                     pKeyValues.add (iVal);
                                     break;
                                 case "String":
-                                    for (sVal = attribute[k] + rand.nextInt (20000); pKeyValues.contains (sVal);
-                                         sVal = attribute[k] + rand.nextInt (20000));
+                                    for (sVal = attribute[k] + rand.nextInt (30000); pKeyValues.contains (sVal);
+                                         sVal = attribute[k] + rand.nextInt (30000));
                                     subResult[j][k] = sVal;
                                     pKeyValues.add (sVal);
                                     break;
                                 case "Double":
-                                    for (dVal = rand.nextInt (20000) * rand.nextDouble (); pKeyValues.contains (dVal);
-                                         dVal = rand.nextInt (20000) * rand.nextDouble ());
+                                    for (dVal = rand.nextInt (30000) * rand.nextDouble (); pKeyValues.contains (dVal);
+                                         dVal = rand.nextInt (30000) * rand.nextDouble ());
                                     subResult[j][k] = dVal;
                                     pKeyValues.add (dVal);
                                     break;
@@ -233,11 +233,11 @@ public class TupleGeneratorImpl
 
                                 switch (domain[k]) {
                                 case "Integer":
-                                    subResult[j][k] = rand.nextInt (20000); break;
+                                    subResult[j][k] = rand.nextInt (30000); break;
                                 case "String":
-                                    subResult[j][k] = attribute [k] + rand.nextInt (20000); break;
+                                    subResult[j][k] = attribute [k] + rand.nextInt (30000); break;
                                 case "Double":
-                                    subResult[j][k] = rand.nextInt (20000) * rand.nextDouble (); break;
+                                    subResult[j][k] = rand.nextInt (30000) * rand.nextDouble (); break;
                                 default:
                                     throw new IllegalArgumentException("Invalid type in switch: " + domain[k]);
                                 } // if

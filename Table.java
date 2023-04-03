@@ -60,7 +60,7 @@ public class Table
 
     /** Index into tuples (maps key to tuple number).
      */
-    private final Map <KeyType, Comparable []> index;
+    public final Map <KeyType, Comparable []> index;
 
     //----------------------------------------------------------------------------------
     // Constructors
