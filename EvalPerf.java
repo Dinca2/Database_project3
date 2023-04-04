@@ -85,22 +85,22 @@ class EvalPerf {
         long [] speeds = new long[4];
 
         long startTime = System.currentTimeMillis();
-        student1.join("id", "studId", transcript1);
+        student1.nonIndexJoin("id", "studId", transcript1);
         long endTime = System.currentTimeMillis();
         speeds[0] = (endTime - startTime);
 
         startTime = System.currentTimeMillis();
-        student2.join("id", "studId", transcript2);
+        student2.nonIndexJoin("id", "studId", transcript2);
         endTime = System.currentTimeMillis();
         speeds[1] = (endTime - startTime);
 
         startTime = System.currentTimeMillis();
-        student3.join("id", "studId", transcript3);
+        student3.nonIndexJoin("id", "studId", transcript3);
         endTime = System.currentTimeMillis();
         speeds[2] = (endTime - startTime);
 
         startTime = System.currentTimeMillis();
-        student3.join("id", "studId", transcript3);
+        student3.nonIndexJoin("id", "studId", transcript3);
         endTime = System.currentTimeMillis();
         speeds[3] = (endTime - startTime);
 
