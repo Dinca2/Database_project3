@@ -1,9 +1,24 @@
 import java.awt.*;  
 import javax.swing.*;  
 import java.awt.geom.*;
-
+import java.util.*;
 class EvalPerf {
-   
+    
+    public static KeyType getLast(Map<KeyType, Comparable []> map)
+    {
+        int count = 2;
+        KeyType it = map.entrySet().iterator().next().getKey();
+        for (Map.Entry<KeyType, Comparable[]> it2 : map.entrySet()) {
+            if (count == map.size()) {
+                System.out.println(it2.getValue());
+                return it2.getKey();
+            }
+            count++;
+        }
+        return it;
+    }
+
+
     public static class Plot extends JPanel{  
 
         //initialize coordinates  
@@ -58,63 +73,268 @@ class EvalPerf {
     } //Plot
     public static void main (String [] args)
     {
+        //Table studentTEST = Table.load("StudentTEST");
+        //Table transcriptTEST = Table.load("TranscriptTEST");
+
         Table student1 = Table.load("Student5k");
-        //Table professor1 = Table.load("Professor5k");
-        //Table course1 = Table.load("Course5k");
-        //Table teaching1 = Table.load("Teaching5k");
         Table transcript1 = Table.load("Transcript5k");
 
         Table student2 = Table.load("Student10k");
-        //Table professor2 = Table.load("Professor10k");
-        //Table course2 = Table.load("Course10k");
-        //Table teaching2 = Table.load("Teaching10k");
         Table transcript2 = Table.load("Transcript10k");
         
         Table student3 = Table.load("Student15k");
-        //Table professor3 = Table.load("Professor15k");
-        //Table course3 = Table.load("Course15k");
-        //Table teaching3 = Table.load("Teaching15k");
         Table transcript3 = Table.load("Transcript15k");
         
         Table student4 = Table.load("Student20k");
-        //Table professor4 = Table.load("Professor20k");
-        //Table course4 = Table.load("Course20k");
-        //Table teaching4 = Table.load("Teaching20k");
         Table transcript4 = Table.load("Transcript20k");
         
-        long [] speeds = new long[4];
+        //student1.print();
+        //transcript1.print();
+        //studentTEST.print();
+        //transcriptTEST.print();
+        //Table test1 = student1.nonIndexJoin("id", "studId", transcript1);
+        //test1.print();
+        //Table test = professorTEST.select(t -> t[professorTEST.col("id")].equals(5000));
+        //test.print();
+        long [] speeds1 = new long[5];
+        long [] speeds2 = new long[5];
+        long [] speeds3 = new long[5];
+        long [] speeds4 = new long[5];
+        long speed1 = 0;
+        long speed2 = 0;
+        long speed3 = 0;
+        long speed4 = 0;
+        
+        /* 
+        for(int i = 0; i < 5; i++) {
+            speed1 = 0;
+            speed2 = 0;
+            speed3 = 0;
+            speed4 = 0;
+            long startTime = System.currentTimeMillis();
+            student1.nonIndexJoin("id", "studId", transcript1); //5k
+            long endTime = System.currentTimeMillis();
+            speed1 += (endTime - startTime);
+            speeds1[i] = speed1;
+            
+            startTime = System.currentTimeMillis();
+            student2.nonIndexJoin("id", "studId", transcript2); //10k
+            endTime = System.currentTimeMillis();
+            speed2 += (endTime - startTime);
+            speeds2[i] = speed2;
 
-        long startTime = System.currentTimeMillis();
-        student1.nonIndexJoin("id", "studId", transcript1);
-        long endTime = System.currentTimeMillis();
-        speeds[0] = (endTime - startTime);
+            startTime = System.currentTimeMillis();
+            student3.nonIndexJoin("id", "studId", transcript3); //15k
+            endTime = System.currentTimeMillis();
+            speed3 += (endTime - startTime);
+            speeds3[i] = speed3;
 
-        startTime = System.currentTimeMillis();
-        student2.nonIndexJoin("id", "studId", transcript2);
-        endTime = System.currentTimeMillis();
-        speeds[1] = (endTime - startTime);
+            startTime = System.currentTimeMillis();
+            student4.nonIndexJoin("id", "studId", transcript4); //20k
+            endTime = System.currentTimeMillis();
+            speed4 += (endTime - startTime);
+            speeds4[i] = speed4;
+        }
+        System.out.println("==no index==");
+        System.out.println("========5k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds1[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========10k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds2[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========15k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds3[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========20k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds4[i]);
+        }
+*/
+        for(int i = 0; i < 5; i++) {
+            speed1 = 0;
+            speed2 = 0;
+            speed3 = 0;
+            speed4 = 0;
+            long startTime = System.currentTimeMillis();
+            student1.indexJoin("id", "studId", transcript1); //5k
+            long endTime = System.currentTimeMillis();
+            speed1 += (endTime - startTime);
+            speeds1[i] = speed1;
+            
+            startTime = System.currentTimeMillis();
+            student2.indexJoin("id", "studId", transcript2); //10k
+            endTime = System.currentTimeMillis();
+            speed2 += (endTime - startTime);
+            speeds2[i] = speed2;
 
-        startTime = System.currentTimeMillis();
-        student3.nonIndexJoin("id", "studId", transcript3);
-        endTime = System.currentTimeMillis();
-        speeds[2] = (endTime - startTime);
+            startTime = System.currentTimeMillis();
+            student3.indexJoin("id", "studId", transcript3); //15k
+            endTime = System.currentTimeMillis();
+            speed3 += (endTime - startTime);
+            speeds3[i] = speed3;
 
-        startTime = System.currentTimeMillis();
-        student3.nonIndexJoin("id", "studId", transcript3);
-        endTime = System.currentTimeMillis();
-        speeds[3] = (endTime - startTime);
-
-        for(int i = 0; i < 3; i++) {
-            System.out.println(speeds[i]);
+            startTime = System.currentTimeMillis();
+            student4.indexJoin("id", "studId", transcript4); //20k
+            endTime = System.currentTimeMillis();
+            speed4 += (endTime - startTime);
+            speeds4[i] = speed4;
+        }   
+        
+        System.out.println("========5k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds1[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========10k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds2[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========15k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds3[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========20k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds4[i]);
         }
         
+        KeyType num1 = getLast(student1.index);
+        KeyType num2 = getLast(student2.index);
+        KeyType num3 = getLast(student3.index);
+        KeyType num4 = getLast(student4.index);
+        speed1 = 0;
+        speed2 = 0;
+        speed3 = 0;
+        speed4 = 0;
+        for(int i = 0; i < 5; i++) {
+            speed1 = 0;
+            speed2 = 0;
+            speed3 = 0;
+            speed4 = 0;
+            long startTime = System.currentTimeMillis();
+            student1.select(num1); //5k
+            long endTime = System.currentTimeMillis();
+            speed1 += (endTime - startTime);
+            speeds1[i] = speed1;
+            
+            startTime = System.currentTimeMillis();
+            student2.select(num2); //10k
+            endTime = System.currentTimeMillis();
+            speed2 += (endTime - startTime);
+            speeds2[i] = speed2;
+
+            startTime = System.currentTimeMillis();
+            student3.select(num3); //15k
+            endTime = System.currentTimeMillis();
+            speed3 += (endTime - startTime);
+            speeds3[i] = speed3;
+
+            startTime = System.currentTimeMillis();
+            student4.select(num4); //20k
+            endTime = System.currentTimeMillis();
+            speed4 += (endTime - startTime);
+            speeds4[i] = speed4;
+        }   
+        
+        System.out.println("========5k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds1[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========10k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds2[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========15k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds3[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========20k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds4[i]);
+        }
+        /* 
+        for(int i = 0; i < 5; i++) {
+            speed1 = 0;
+            speed2 = 0;
+            speed3 = 0;
+            speed4 = 0;
+            long startTime = System.currentTimeMillis();
+            student1.select(t -> t[student1.col("status")].equals("status10000")); //5k
+            long endTime = System.currentTimeMillis();
+            speed1 += (endTime - startTime);
+            speeds1[i] = speed1;
+            
+            startTime = System.currentTimeMillis();
+            student2.select(t -> t[student2.col("status")].equals("status10000")); //10k
+            endTime = System.currentTimeMillis();
+            speed2 += (endTime - startTime);
+            speeds2[i] = speed2;
+
+            startTime = System.currentTimeMillis();
+            student3.select(t -> t[student3.col("status")].equals("status10000")); //15k
+            endTime = System.currentTimeMillis();
+            speed3 += (endTime - startTime);
+            speeds3[i] = speed3;
+
+            startTime = System.currentTimeMillis();
+            student4.select(t -> t[student4.col("status")].equals("status10000")); //20k
+            endTime = System.currentTimeMillis();
+            speed4 += (endTime - startTime);
+            speeds4[i] = speed4;
+        }   
+        System.out.println("==no index==");
+        System.out.println("========5k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds1[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========10k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds2[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========15k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds3[i]);
+        }
+        System.out.println();
+        
+        System.out.println("========20k speeds=======");
+        for(int i = 0; i < 5; i++) {
+            System.out.println(speeds4[i]);
+        }
+        */
+        /* 
         JFrame frame = new JFrame();  
         // set size, layout and location for frame.  
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         frame.add(new Plot(speeds));  
-        frame.setSize(1000, 1000);  
+        frame.setSize(600, 600);  
         frame.setLocation(200, 200);  
         frame.setVisible(true);  
+        */
     } //main
 
 } //evalperf
