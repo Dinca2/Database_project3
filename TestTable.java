@@ -1,8 +1,8 @@
 
-class TestTable
+public class TestTable
 {
     /*************************************************************************************
-     * @param args  the command-line arguments
+     * @param args the command-line arguments
      */
     public static void main (String [] args)
     {
@@ -60,7 +60,7 @@ class TestTable
         Table professor = new Table ("Professor5k", "id name deptId", "Integer String String", "id");
         Table course = new Table ("Course5k", "crsCode deptId crsName descr", "String String String String", "crsCode");
         Table teaching = new Table ("Teaching5k", "crsCode semester profId", "String String Integer", "crcCode semester");
-        Table transcript = new Table ("Transcript5k", "studId crsCode semester grade", "Integer String String String", "studId crsCode semester");
+        Table transcript = new Table ("Transcript5k", "studId crsCode semester grade", "Integer String String String", "studId crsCode semester"); // crsCode semester
         
         /*
         var tups2 = new int [] { 10000,  100, 100, 100, 10000};

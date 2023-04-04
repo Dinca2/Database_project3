@@ -40,7 +40,7 @@ public class LinHashMap <K extends java.lang.Comparable<? super K>, V>
     /********************************************************************************
      * This inner class defines buckets that are stored in the hash table.
      */
-    private class Bucket
+    private class Bucket implements Serializable
     {
         int    nKeys;
         K []   key;
